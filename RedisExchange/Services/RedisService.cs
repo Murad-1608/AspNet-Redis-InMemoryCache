@@ -4,28 +4,15 @@ namespace RedisExchange.Services
 {
     public class RedisService
     {
-        private readonly string _redisHost;
-        private readonly string _redisPort;
-        private ConnectionMultiplexer _redis;
-        private IDatabase db;
-        public RedisService(IConfiguration configuration,
-                            ConnectionMultiplexer redis)
+        private readonly ConnectionMultiplexer _connectionMultiplexer;
+        public RedisService(string Url)
         {
-            _redisHost = configuration["Redis:Host"]!;
-            _redisPort = configuration["Redis:Port"]!;
-            _redis = redis;
+            _connectionMultiplexer = ConnectionMultiplexer.Connect(Url);
         }
 
-        public void Connect()
+        public IDatabase GetDb(int dbIndex)
         {
-            string configString = $"{_redisHost}:{_redisPort}";
-
-            _redis = ConnectionMultiplexer.Connect(configString);
-        }
-
-        public IDatabase GetDb(int db)
-        {
-            return _redis.GetDatabase(db);
+            return _connectionMultiplexer.GetDatabase(dbIndex);
         }
     }
 }

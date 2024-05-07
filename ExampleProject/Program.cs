@@ -1,14 +1,7 @@
-using RedisExchange.Services;
-
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-builder.Services.AddSingleton<RedisService>((opt) =>
-{
-    return new RedisService(builder.Configuration["Redis:Url"]!);
-});
-
 
 var app = builder.Build();
 
